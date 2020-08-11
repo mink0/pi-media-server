@@ -1,0 +1,44 @@
+---
+
+version: "2.1"
+services:
+  #
+  # Nginx proxy
+  #
+  nginx:
+    image: linuxserver/nginx
+    container_name: nginx
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - ./config/nginx/proxy.conf:/config/nginx/proxy.conf
+      - ./config/nginx/ssl.conf:/config/nginx/ssl.conf
+      - ./config/nginx/site-confs/transmission.subdomain.conf:/config/nginx/site-confs/transmission.subdomain.conf
+      - ./config/nginx/site-confs/default:/config/nginx/site-confs/default
+    ports:
+      - 80:80
+      - 443:443
+    restart: unless-stopped
+
+  #
+  # Transmission
+  #
+  transmission:
+    image: linuxserver/transmission
+    container_name: transmission
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - $MEDIA_DIR/transmission:/config
+      - ./config/transmission/settings.json:/config/settings.json
+      - $MEDIA_DIR:/downloads
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
+

@@ -1,0 +1,14 @@
+{
+    "download-dir": "/downloads/movies",
+    "incomplete-dir-enabled": false,
+    "rpc-authentication-required": false,
+    "rpc-host-whitelist-enabled": false,
+    "rpc-whitelist-enabled": false,
+    "lpd-enabled": false,
+    "umask": 0,
+    "upload-limit": 100,
+    "upload-limit-enabled": 1,
+    "upload-slots-per-torrent": 1,
+    "watch-dir": "/downloads/watch",
+    "watch-dir-enabled": true
+}
