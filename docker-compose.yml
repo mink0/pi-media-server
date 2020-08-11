@@ -42,3 +42,21 @@ services:
       - 51413:51413/udp
     restart: unless-stopped
 
+  #
+  # miniDLNA server
+  #
+  minidlna:
+    image: vladgh/minidlna
+    container_name: minidlna
+    environment:
+      - MINIDLNA_MEDIA_DIR_1=V,/media/movies
+      - MINIDLNA_MEDIA_DIR_2=V,/media/tvshows
+      - MINIDLNA_MEDIA_DIR_3=V,/media/cartoons
+      - MINIDLNA_friendly_name=raspberry
+      - MINIDLNA_root_container=V
+      - MINIDLNA_inotify=yes
+    volumes:
+      - $MEDIA_DIR:/media
+    network_mode: host
+    restart: unless-stopped
+
