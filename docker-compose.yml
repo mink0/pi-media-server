@@ -15,8 +15,10 @@ services:
     volumes:
       - ./config/nginx/proxy.conf:/config/nginx/proxy.conf
       - ./config/nginx/ssl.conf:/config/nginx/ssl.conf
-      - ./config/nginx/site-confs/transmission.subdomain.conf:/config/nginx/site-confs/transmission.subdomain.conf
-      - ./config/nginx/site-confs/default:/config/nginx/site-confs/default
+      - ./config/nginx/site-confs:/config/nginx/site-confs
+        #- ./config/nginx/site-confs/transmission.subdomain.conf:/config/nginx/site-confs/transmission.subdomain.conf
+        #- ./config/nginx/site-confs/jackett.subdomain.conf:/config/nginx/site-confs/jackett.subdomain.conf
+        #- ./config/nginx/site-confs/default:/config/nginx/site-confs/default
     ports:
       - 80:80
       - 443:443
@@ -60,3 +62,68 @@ services:
     network_mode: host
     restart: unless-stopped
 
+  #
+  # Jackett + Sonarr + Radarr
+  #
+  tor:
+    image: dperson/torproxy
+    container_name: tor
+    environment:
+      - USERID=$PUID
+      - GROUPID=$PGID
+      - TZ=$TZ
+      - BW=100
+      - LOCATION=UA
+    ports:
+      - 8118:8118
+      - 9050:9050
+    restart: unless-stopped
+
+  jackett:
+    image: linuxserver/jackett
+    container_name: jackett
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - RUN_OPTS=--ProxyConnection=tor:8118
+    volumes:
+      - $MEDIA_DIR/jackett:/config
+      #- ./data/jackett:/config
+      - $MEDIA_DIR/movies:/downloads
+    ports:
+      - 9117:9117
+    #depends_on:
+    #  tor:
+    #    condition: service_healthy
+    restart: unless-stopped
+
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - $MEDIA_DIR/sonarr:/config
+      - $MEDIA_DIR/tvshows:/tv
+      - $MEDIA_DIR/movies:/downloads
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+  radarr:
+    image: linuxserver/radarr
+    container_name: radarr
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - $MEDIA_DIR/radarr:/config
+      - $MEDIA_DIR/movies:/movies
+      - $MEDIA_DIR/movies:/downloads
+    ports:
+      - 7878:7878
+    restart: unless-stopped
