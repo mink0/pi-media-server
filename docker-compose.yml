@@ -16,9 +16,7 @@ services:
       - ./config/nginx/proxy.conf:/config/nginx/proxy.conf
       - ./config/nginx/ssl.conf:/config/nginx/ssl.conf
       - ./config/nginx/site-confs:/config/nginx/site-confs
-        #- ./config/nginx/site-confs/transmission.subdomain.conf:/config/nginx/site-confs/transmission.subdomain.conf
-        #- ./config/nginx/site-confs/jackett.subdomain.conf:/config/nginx/site-confs/jackett.subdomain.conf
-        #- ./config/nginx/site-confs/default:/config/nginx/site-confs/default
+      - ./config/nginx/www:/config/www
     ports:
       - 80:80
       - 443:443
@@ -54,6 +52,7 @@ services:
       - MINIDLNA_MEDIA_DIR_1=V,/media/movies
       - MINIDLNA_MEDIA_DIR_2=V,/media/tvshows
       - MINIDLNA_MEDIA_DIR_3=V,/media/cartoons
+      - MINIDLNA_MEDIA_DIR_4=A,/media/music
       - MINIDLNA_friendly_name=raspberry
       - MINIDLNA_root_container=V
       - MINIDLNA_inotify=yes
@@ -63,7 +62,7 @@ services:
     restart: unless-stopped
 
   #
-  # Jackett + Sonarr + Radarr
+  # Jackett + Sonarr + Radarr + Lidarr
   #
   tor:
     image: dperson/torproxy
@@ -126,4 +125,19 @@ services:
       - $MEDIA_DIR/movies:/downloads
     ports:
       - 7878:7878
+    restart: unless-stopped
+
+  lidarr:
+    image: linuxserver/lidarr
+    container_name: lidarr
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - $MEDIA_DIR/lidarr:/config
+      - $MEDIA_DIR/music:/music
+      - $MEDIA_DIR/music:/downloads
+    ports:
+      - 8686:8686
     restart: unless-stopped

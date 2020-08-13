@@ -1,0 +1,48 @@
+<!doctype html>
+<title>Home Media Server</title>
+<style>
+  body {
+    text-align: center;
+    padding: auto;
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  body {
+    font: 1.5em Helvetica, sans-serif;
+    color: #333;
+  }
+
+  article {
+    display: block;
+    text-align: left;
+    width: 50%;
+    margin: 0 auto;
+  }
+
+  a {
+    color: #dc8100;
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: #333;
+    text-decoration: none;
+  }
+</style>
+
+<body>
+  <article>
+    <h1>Home Media Server</h1>
+    <ul>
+      <li><a href="#" onclick="javascript:event.target.port=9091">Torrents (Transmission)</a></li>
+      <li><a href="#" onclick="javascript:event.target.port=9117">Search indexer (Jackett)</a></li>
+      <li><a href="#" onclick="javascript:event.target.port=7878">Movies (Radarr)</a></li>
+      <li><a href="#" onclick="javascript:event.target.port=8989">TV shows (Sonarr)</a></li>
+      <li><a href="#" onclick="javascript:event.target.port=8686">Music (Lidarr)</a></li>
+    </ul>
+  </article>
+</body>
+
