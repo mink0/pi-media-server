@@ -1,0 +1,11 @@
+#!/usr/bin/with-contenv bash
+
+# init default config
+
+conf=ServerConfig.json
+mkdir -p /config/Jackett/DataProtection
+if [[ ! -f /config/Jackett/$conf ]]; then 
+  cp /defaults/$conf /config/Jackett/$conf
+  chown -R abc: /config
+  #chmod -R o+w /config
+fi

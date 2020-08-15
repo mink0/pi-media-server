@@ -32,10 +32,15 @@ services:
       - PUID=$PUID
       - PGID=$PGID
       - TZ=$TZ
+      - UMASK=$UMASK
     volumes:
+      - $MEDIA_DIR/downloads:/downloads
+      - $MEDIA_DIR/media/movies:/movies
+      - $MEDIA_DIR/media/cartoons:/cartoons
+      - $MEDIA_DIR/media/tvshows:/tvshows
+      - $MEDIA_DIR/media/music:/music
       - $MEDIA_DIR/transmission:/config
-      - ./config/transmission/settings.json:/config/settings.json
-      - $MEDIA_DIR:/downloads
+      - ./config/transmission/settings.json:/defaults/settings.json
     ports:
       - 9091:9091
       - 51413:51413
@@ -53,13 +58,72 @@ services:
       - MINIDLNA_MEDIA_DIR_2=V,/media/tvshows
       - MINIDLNA_MEDIA_DIR_3=V,/media/cartoons
       - MINIDLNA_MEDIA_DIR_4=A,/media/music
-      - MINIDLNA_friendly_name=raspberry
-      - MINIDLNA_root_container=V
+      - MINIDLNA_MEDIA_DIR_5=/media/downloads
       - MINIDLNA_inotify=yes
+      - MINIDLNA_root_container=B
     volumes:
-      - $MEDIA_DIR:/media
+      - $MEDIA_DIR/media:/media:ro
+      - $MEDIA_DIR/downloads:/media/downloads:ro
     network_mode: host
     restart: unless-stopped
+
+  #
+  # Plex
+  #
+  plex:
+    image: linuxserver/plex
+    container_name: plex
+    environment:
+      - USERID=$PUID
+      - GROUPID=$PGID
+      - TZ=$TZ
+      - VERSION=docker
+    volumes:
+      - $MEDIA_DIR/media:/data:ro
+      - $MEDIA_DIR/plex:/config
+    network_mode: host
+    restart: unless-stopped
+
+  #
+  # Emby server
+  #
+  #emby:
+  #  image: linuxserver/emby
+  #  container_name: emby
+  #  environment:
+  #    - USERID=$PUID
+  #    - GROUPID=$PGID
+  #    - TZ=$TZ
+  #  volumes:
+  #    - $MEDIA_DIR/media:/data:ro
+  #    - $MEDIA_DIR/emby:/config
+  #    - /dev/dri:/dev/dri
+  #  network_mode: host
+  #  restart: unless-stopped
+
+  #
+  # readymedia (you need to build it locally)
+  #
+  #  image: rpi-readymedia
+  #  container_name: readymedia
+  #  volumes:
+  #    - ./config/readymedia/minidlna.conf:/etc/minidlna.conf
+  #    - $MEDIA_DIR/media:/media:ro
+  #    - $MEDIA_DIR/downloads:/media/downloads:ro
+  #  network_mode: host
+  #  restart: unless-stopped
+
+  #
+  # Gerbera: (youn need to build it locally)
+  #
+  #gerbera:
+  #  image: gerbera
+  #  container_name: gerbera
+  #  volumes:
+  #    - $MEDIA_DIR/media:/media:ro
+  #    - ./config/gerbera/config.xml:/root/.config/gerbera/config.xml
+  #  network_mode: host
+  #  restart: unless-stopped
 
   #
   # Jackett + Sonarr + Radarr + Lidarr
@@ -71,8 +135,8 @@ services:
       - USERID=$PUID
       - GROUPID=$PGID
       - TZ=$TZ
-      - BW=100
-      - LOCATION=UA
+      - BW=$TOR_LIMIT_BW
+      - LOCATION=$TOR_LOCATION
     ports:
       - 8118:8118
       - 9050:9050
@@ -85,16 +149,14 @@ services:
       - PUID=$PUID
       - PGID=$PGID
       - TZ=$TZ
-      - RUN_OPTS=--ProxyConnection=tor:8118
+      - RUN_OPTS=tor.lan:8091
     volumes:
       - $MEDIA_DIR/jackett:/config
-      #- ./data/jackett:/config
-      - $MEDIA_DIR/movies:/downloads
+      - $MEDIA_DIR/downloads:/downloads
+      - ./config/jackett/ServerConfig.json:/defaults/ServerConfig.json
+      - ./config/jackett/cont-init.d:/etc/cont-init.d
     ports:
       - 9117:9117
-    #depends_on:
-    #  tor:
-    #    condition: service_healthy
     restart: unless-stopped
 
   sonarr:
@@ -104,10 +166,11 @@ services:
       - PUID=$PUID
       - PGID=$PGID
       - TZ=$TZ
+      - UMASK=$UMASK
     volumes:
       - $MEDIA_DIR/sonarr:/config
-      - $MEDIA_DIR/tvshows:/tv
-      - $MEDIA_DIR/movies:/downloads
+      - $MEDIA_DIR/media/tvshows:/tv
+      - $MEDIA_DIR/downloads:/downloads
     ports:
       - 8989:8989
     restart: unless-stopped
@@ -119,10 +182,11 @@ services:
       - PUID=$PUID
       - PGID=$PGID
       - TZ=$TZ
+      - UMASK=$UMASK
     volumes:
       - $MEDIA_DIR/radarr:/config
-      - $MEDIA_DIR/movies:/movies
-      - $MEDIA_DIR/movies:/downloads
+      - $MEDIA_DIR/media/movies:/movies
+      - $MEDIA_DIR/downloads:/downloads
     ports:
       - 7878:7878
     restart: unless-stopped
@@ -134,10 +198,11 @@ services:
       - PUID=$PUID
       - PGID=$PGID
       - TZ=$TZ
+      - UMASK=$UMASK
     volumes:
       - $MEDIA_DIR/lidarr:/config
-      - $MEDIA_DIR/music:/music
-      - $MEDIA_DIR/music:/downloads
+      - $MEDIA_DIR/media/music:/music
+      - $MEDIA_DIR/downloads:/downloads
     ports:
       - 8686:8686
     restart: unless-stopped
