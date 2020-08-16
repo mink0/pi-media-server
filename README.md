@@ -1,25 +1,30 @@
 # pi-media-server
 
-Easy install and lightweight media server inteneded to be used on low powered hardware (raspberry pi and such).
+Lightweight media server inteneded to be used on low powered hardware (**Raspberry Pi** and such) based on Docker.
+Basically it is all you need to turn on your **Raspberry Pi 4** into download'n'streaming box in 2020.
 
 ### Features
 
-- TOR proxy (http, socks5): preconfigured by deafult for Jackett (to bypass blocking lists)
-- miniDLNA: lightweight and fast DLNA server which provides direct streaming
-- Jackett: for searching scraping
-- Radarr: for serching movies
-- Sonarr: for searching tv shows
-- Lidarr: for searching music
+- Easy install
+- Configuration will be stored on external device to prevent data loss in case sd card is dead
+- **miniDLNA**: lightweight DLNA server which provides direct streaming and strict folder view
+- **Transmission**: it was created to be light & fast on slow hardware
+- **TOR** proxy (http, socks5): to bypass ISP blocking lists
+- **Jackett**: well-known tracker indexer with preconfigured TOR proxy
+- **Radarr**: for serching movies
+- **Sonarr**: for searching tv shows
+- **Lidarr**: for searching music
+- **Nginx**: for easy access using custom dmain names
 
 ### Media directory tree (will be created automatically on `$MEDIA_DIR`):
 
-    /downloads
-    /config
+    /downloads  - used as default for Transmission
+    /config     - all working configuration is stored here
       /jackett
       /radarr
       /sonarr
       ...
-    /media
+    /media      - all downloaded media are hardlinked or stored there
       /movies
       /tvshows
       /music
@@ -46,6 +51,7 @@ Easy install and lightweight media server inteneded to be used on low powered ha
 
 Thats it! 
 
+Check from your TV for new local media server available (like `raspberry:minidlna`).
 Got to `http://<server-ip>` to access available services and setup Jackett + [Rad|Lid|Son]arr to use your prefered trackers.
 
 If you add DNS records for `.*server.domain` -> `server-ip` all services will also be accessible using subdomains:
@@ -55,7 +61,7 @@ If you add DNS records for `.*server.domain` -> `server-ip` all services will al
 or by an alias, for example:
 
 - http://tv.media.local
-- http://movies.media.local
+- http://movie.media.local
 - http://music.media.local
 - http://jackett.media.local
 
@@ -91,7 +97,12 @@ and then apply it:
 
 To use them, uncomment related sections in [docker-compose.yml](./docker-compose.yml)
 
+### Plex
+
+Technically Plex could be run in parallel with miniDLNA. I will recommend to disable server-side transcoding and enable DLNA from Plex UI.
+You will need provide proper `PLEX_CLAIM` on first launch.
+
 ## TODO
 
-- Add Jacket indexers auto import
-
+- Add Jacket indexers auto-import
+- Systemd scripts
