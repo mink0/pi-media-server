@@ -4,15 +4,16 @@ Easy install and lightweight media server inteneded to be used on low powered ha
 
 ### Features
 
-- TOR proxy (http, socks5): preconfigured by deafult for Jackett (to bypass blocking list)
+- TOR proxy (http, socks5): preconfigured by deafult for Jackett (to bypass blocking lists)
 - miniDLNA: lightweight and fast DLNA server which provides direct streaming
-- Jackett: for torrent seraching
-- Radarr: for movies
-- Sonarr: for tv shows
-- Lidarr: for music
+- Jackett: for searching scraping
+- Radarr: for serching movies
+- Sonarr: for searching tv shows
+- Lidarr: for searching music
 
-### Media directory tree (will be creted automatically on $MEDIA_DIR):
+### Media directory tree (will be created automatically on `$MEDIA_DIR`):
 
+    /downloads
     /config
       /jackett
       /radarr
@@ -21,29 +22,31 @@ Easy install and lightweight media server inteneded to be used on low powered ha
     /media
       /movies
       /tvshows
+      /music
       ...
-    /downloads
 
 ## Installation
 
 - Clone this repo
 
-- Edit variables in `.env`:
+      git clone https://github.com/mink0/pi-media-server.git 
 
-    cp env.sample .env
-    nano .env
+- Set path to `$MEDIA_DIR` in `.env`:
+
+      cp env.sample .env
+      nano .env
 
 - Install `docker` and `docker-compose`:
 
-    sudo apt-get install -y docker docker-compose
+      sudo apt-get install -y docker docker-compose
 
 - Launch server as a daemon:
 
-    docker-compose up -d
+      docker-compose up -d
 
 Thats it! 
 
-Got to `http://<server-ip>` to access all available services and setup Jackett + [Rad|Lid|Son]arr to use your preffered torrent trackers.
+Got to `http://<server-ip>` to access available services and setup Jackett + [Rad|Lid|Son]arr to use your prefered trackers.
 
 If you add DNS records for `.*server.domain` -> `server-ip` all services will also be accessible using subdomains:
   
@@ -56,18 +59,18 @@ or by an alias, for example:
 - http://music.media.local
 - http://jackett.media.local
 
-## Add Jackett to Radarr, Sonarr, etc.
+## Add Jackett to Radarr, Sonarr, Lidarr
 
 Use the following link to add aggregated Jackett indexer results:
     
     settings/indexers -> Add indexer -> Torznab (custom) -> URL
     http://jackett:9117/api/v2.0/indexers/all/results/torznab
 
-or add each torrent tracker individually.
+or add each tracker indexers individually.
 
 ## Additioanl config
 
-To avoid errors add this to /etc/sysctl.conf on your server:
+To avoid long-running errors add this to `/etc/sysctl.conf` on your server:
 
 ```
 net.core.rmem_max = 4194304
@@ -81,12 +84,12 @@ and then apply it:
 
 ### Optional services
 
-To use them, uncomment related sections in `docker-compose.yml`:
-
 - Plex
 - Emby
 - Gerbera
 - Readymedia
+
+To use them, uncomment related sections in [docker-compose.yml](./docker-compose.yml)
 
 ## TOOD
 
