@@ -40,7 +40,7 @@ Easy install and lightweight media server inteneded to be used on low powered ha
 
       sudo apt-get install -y docker docker-compose
 
-- Launch server as a daemon:
+- Launch services in daemon mode:
 
       docker-compose up -d
 
@@ -91,7 +91,7 @@ and then apply it:
 
 To use them, uncomment related sections in [docker-compose.yml](./docker-compose.yml)
 
-## TOOD
+## TODO
 
 - Add Jacket indexers auto import
 
