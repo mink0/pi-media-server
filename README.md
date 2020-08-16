@@ -82,7 +82,7 @@ and then apply it:
 
     sudo sysctl -p
 
-### Optional services
+## Optional services
 
 - Plex
 - Emby
