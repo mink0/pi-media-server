@@ -3,7 +3,8 @@
 ## Add Jackett to Radarr, Sonarr, etc.
 
 Use the following link to add aggregated Jackett indexer results:
-
+    
+    settings/indexers -> Add indexer -> Torznab (custom) -> URL
     http://jackett:9117/api/v2.0/indexers/all/results/torznab
 
 ## Additioanl config

@@ -34,13 +34,13 @@ services:
       - TZ=$TZ
       - UMASK=$UMASK
     volumes:
+      - $MEDIA_DIR/config/transmission:/config
+      - ./config/transmission/settings.json:/defaults/settings.json
       - $MEDIA_DIR/downloads:/downloads
       - $MEDIA_DIR/media/movies:/movies
       - $MEDIA_DIR/media/cartoons:/cartoons
       - $MEDIA_DIR/media/tvshows:/tvshows
       - $MEDIA_DIR/media/music:/music
-      - $MEDIA_DIR/transmission:/config
-      - ./config/transmission/settings.json:/defaults/settings.json
     ports:
       - 9091:9091
       - 51413:51413
@@ -77,10 +77,11 @@ services:
       - USERID=$PUID
       - GROUPID=$PGID
       - TZ=$TZ
+      - PLEX_CLAIM=$PLEX_CLAIM
       - VERSION=docker
     volumes:
+      - $MEDIA_DIR/config/plex:/config
       - $MEDIA_DIR/media:/data:ro
-      - $MEDIA_DIR/plex:/config
     network_mode: host
     restart: unless-stopped
 
@@ -102,7 +103,7 @@ services:
   #  restart: unless-stopped
 
   #
-  # readymedia (you need to build it locally)
+  # Readymedia (you need to build it locally)
   #
   #  image: rpi-readymedia
   #  container_name: readymedia
@@ -125,8 +126,13 @@ services:
   #  network_mode: host
   #  restart: unless-stopped
 
-  #
+
+  ##
   # Jackett + Sonarr + Radarr + Lidarr
+  #
+
+  #
+  # Tor proxy (set for Jackett)
   #
   tor:
     image: dperson/torproxy
@@ -151,30 +157,16 @@ services:
       - TZ=$TZ
       - RUN_OPTS=tor.lan:8091
     volumes:
-      - $MEDIA_DIR/jackett:/config
-      - $MEDIA_DIR/downloads:/downloads
+      - $MEDIA_DIR/config/jackett:/config/Jackett
       - ./config/jackett/ServerConfig.json:/defaults/ServerConfig.json
       - ./config/jackett/cont-init.d:/etc/cont-init.d
     ports:
       - 9117:9117
     restart: unless-stopped
 
-  sonarr:
-    image: linuxserver/sonarr
-    container_name: sonarr
-    environment:
-      - PUID=$PUID
-      - PGID=$PGID
-      - TZ=$TZ
-      - UMASK=$UMASK
-    volumes:
-      - $MEDIA_DIR/sonarr:/config
-      - $MEDIA_DIR/media/tvshows:/tv
-      - $MEDIA_DIR/downloads:/downloads
-    ports:
-      - 8989:8989
-    restart: unless-stopped
-
+  #
+  # Radarr (movies)
+  #
   radarr:
     image: linuxserver/radarr
     container_name: radarr
@@ -184,13 +176,36 @@ services:
       - TZ=$TZ
       - UMASK=$UMASK
     volumes:
-      - $MEDIA_DIR/radarr:/config
+      - $MEDIA_DIR/config/radarr:/config
       - $MEDIA_DIR/media/movies:/movies
       - $MEDIA_DIR/downloads:/downloads
     ports:
       - 7878:7878
     restart: unless-stopped
 
+
+  #
+  # Sonarr (tvshows)
+  #
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - UMASK=$UMASK
+    volumes:
+      - $MEDIA_DIR/config/sonarr:/config
+      - $MEDIA_DIR/media/tvshows:/tvshows
+      - $MEDIA_DIR/downloads:/downloads
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+  #
+  # Lidarr (music)
+  #
   lidarr:
     image: linuxserver/lidarr
     container_name: lidarr
@@ -200,7 +215,7 @@ services:
       - TZ=$TZ
       - UMASK=$UMASK
     volumes:
-      - $MEDIA_DIR/lidarr:/config
+      - $MEDIA_DIR/config/lidarr:/config
       - $MEDIA_DIR/media/music:/music
       - $MEDIA_DIR/downloads:/downloads
     ports:
