@@ -1,16 +1,17 @@
 # pi-media-server
 
-Lightweight media server inteneded to be used on low powered hardware (**Raspberry Pi** and such) based on Docker.
-Basically it is all you need to turn on your **Raspberry Pi 4** into download'n'streaming box in 2020.
+Lightweight media server stack intended to be used on low-power hardware (**Raspberry Pi** and such).
+
+Basically this will turn your **Raspberry Pi** into download'n'streaming box. It is based on 
+**Tor** and **Privoxy** for ISP filtering bypassing as an alternative to VPN-based solutions.
 
 ### Features
 
-- Easy install
-- Configuration will be stored on external device to prevent data loss in case sd card is dead
+- **Docker**: Easy to install and manage
 - **miniDLNA**: lightweight DLNA server which provides direct streaming and strict folder view
 - **Transmission**: it was created to be light & fast on slow hardware
-- **TOR** proxy (http, socks5): to bypass ISP blocking lists
-- **Jackett**: well-known tracker indexer with preconfigured TOR proxy
+- **Tor && Privoxy** (http, socks5): to bypass ISP blocking lists
+- **Jackett**: well-known tracker indexer with preconfigured Tor proxy
 - **Radarr**: for serching movies
 - **Sonarr**: for searching tv shows
 - **Lidarr**: for searching music
@@ -36,7 +37,7 @@ Basically it is all you need to turn on your **Raspberry Pi 4** into download'n'
 
       git clone https://github.com/mink0/pi-media-server.git 
 
-- Set path to `$MEDIA_DIR` in `.env`:
+- Set path to `$MEDIA_DIR` and `$CONFIG_DIR` in `.env`:
 
       cp env.sample .env
       nano .env

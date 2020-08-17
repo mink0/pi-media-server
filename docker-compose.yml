@@ -34,7 +34,7 @@ services:
       - TZ=$TZ
       - UMASK=$UMASK
     volumes:
-      - $MEDIA_DIR/config/transmission:/config
+      - $CONFIG_DIR/transmission:/config
       - ./config/transmission/settings.json:/defaults/settings.json
       - $MEDIA_DIR/downloads:/downloads
       - $MEDIA_DIR/media/movies:/movies
@@ -80,7 +80,7 @@ services:
   #    - PLEX_CLAIM=$PLEX_CLAIM
   #    - VERSION=docker
   #  volumes:
-  #    - $MEDIA_DIR/config/plex:/config
+  #    - $CONFIG_DIR/plex:/config
   #    - $MEDIA_DIR/media:/data:ro
   #  network_mode: host
   #  restart: unless-stopped
@@ -96,8 +96,8 @@ services:
   #    - GROUPID=$PGID
   #    - TZ=$TZ
   #  volumes:
+  #    - $CONFIG_DIR/emby:/config
   #    - $MEDIA_DIR/media:/data:ro
-  #    - $MEDIA_DIR/emby:/config
   #    - /dev/dri:/dev/dri
   #  network_mode: host
   #  restart: unless-stopped
@@ -156,7 +156,7 @@ services:
       - PGID=$PGID
       - TZ=$TZ
     volumes:
-      - $MEDIA_DIR/config/jackett:/config/Jackett
+      - $CONFIG_DIR/jackett:/config/Jackett
       - ./config/jackett/ServerConfig.json:/defaults/ServerConfig.json
       - ./config/jackett/cont-init.d:/etc/cont-init.d
     ports:
@@ -175,7 +175,7 @@ services:
       - TZ=$TZ
       - UMASK=$UMASK
     volumes:
-      - $MEDIA_DIR/config/radarr:/config
+      - $CONFIG_DIR/radarr:/config
       - $MEDIA_DIR/media/movies:/movies
       - $MEDIA_DIR/downloads:/downloads
     ports:
@@ -195,7 +195,7 @@ services:
       - TZ=$TZ
       - UMASK=$UMASK
     volumes:
-      - $MEDIA_DIR/config/sonarr:/config
+      - $CONFIG_DIR/sonarr:/config
       - $MEDIA_DIR/media/tvshows:/tvshows
       - $MEDIA_DIR/downloads:/downloads
     ports:
@@ -214,7 +214,7 @@ services:
       - TZ=$TZ
       - UMASK=$UMASK
     volumes:
-      - $MEDIA_DIR/config/lidarr:/config
+      - $CONFIG_DIR/lidarr:/config
       - $MEDIA_DIR/media/music:/music
       - $MEDIA_DIR/downloads:/downloads
     ports:
