@@ -58,12 +58,12 @@ services:
       - MINIDLNA_MEDIA_DIR_2=V,/media/tvshows
       - MINIDLNA_MEDIA_DIR_3=V,/media/cartoons
       - MINIDLNA_MEDIA_DIR_4=A,/media/music
-      - MINIDLNA_MEDIA_DIR_5=/media/downloads
+      - MINIDLNA_MEDIA_DIR_5=/downloads
       - MINIDLNA_inotify=yes
       - MINIDLNA_root_container=B
     volumes:
       - $MEDIA_DIR/media:/media:ro
-      - $MEDIA_DIR/downloads:/media/downloads:ro
+      - $MEDIA_DIR/downloads:/downloads:ro
     network_mode: host
     restart: unless-stopped
 
@@ -155,7 +155,6 @@ services:
       - PUID=$PUID
       - PGID=$PGID
       - TZ=$TZ
-      - RUN_OPTS=tor.lan:8091
     volumes:
       - $MEDIA_DIR/config/jackett:/config/Jackett
       - ./config/jackett/ServerConfig.json:/defaults/ServerConfig.json
