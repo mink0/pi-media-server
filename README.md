@@ -15,7 +15,7 @@ Basically this will turn your **Raspberry Pi** into download'n'streaming box. It
 - **Radarr**: for serching movies
 - **Sonarr**: for searching tv shows
 - **Lidarr**: for searching music
-- **Nginx**: for easy access using custom dmain names
+- **Nginx**: custom domain names
 
 ### Media directory tree (will be created automatically on `$MEDIA_DIR`):
 
@@ -46,14 +46,14 @@ Basically this will turn your **Raspberry Pi** into download'n'streaming box. It
 
       sudo apt-get install -y docker docker-compose
 
-- Launch services in daemon mode:
+- Launch stack in daemon mode:
 
       docker-compose up -d
 
 Thats it! 
 
 Check from your TV for new local media server available (like `raspberry:minidlna`).
-Got to `http://<server-ip>` to access available services and setup Jackett + [Rad|Lid|Son]arr to use your prefered trackers.
+Got to `http://<server-ip>` to access available services and setup Jackett + [Rad|Lid|Son]arr to use with your prefered trackers.
 
 If you add DNS records for `.*server.domain` -> `server-ip` all services will also be accessible using subdomains:
   
@@ -100,8 +100,8 @@ To use them, uncomment related sections in [docker-compose.yml](./docker-compose
 
 ### Plex
 
-Technically Plex could be run in parallel with miniDLNA. I will recommend to disable server-side transcoding and enable DLNA from Plex UI.
-You will need provide proper `PLEX_CLAIM` on first launch.
+Technically Plex could be run in parallel with miniDLNA. I would recommend to disable server-side transcoding and enable DLNA from Plex UI.
+You will also need to provide proper `$PLEX_CLAIM` variable on first launch.
 
 ## TODO
 
