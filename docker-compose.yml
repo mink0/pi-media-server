@@ -70,20 +70,20 @@ services:
   #
   # Plex
   #
-  plex:
-    image: linuxserver/plex
-    container_name: plex
-    environment:
-      - USERID=$PUID
-      - GROUPID=$PGID
-      - TZ=$TZ
-      - PLEX_CLAIM=$PLEX_CLAIM
-      - VERSION=docker
-    volumes:
-      - $CONFIG_DIR/plex:/config
-      - $MEDIA_DIR/media:/data:ro
-    network_mode: host
-    restart: unless-stopped
+  #plex:
+  #  image: linuxserver/plex
+  #  container_name: plex
+  #  environment:
+  #    - USERID=$PUID
+  #    - GROUPID=$PGID
+  #    - TZ=$TZ
+  #    - PLEX_CLAIM=$PLEX_CLAIM
+  #    - VERSION=docker
+  #  volumes:
+  #    - $CONFIG_DIR/plex:/config
+  #    - $MEDIA_DIR/media:/data:ro
+  #  network_mode: host
+  #  restart: unless-stopped
 
   #
   # Emby server
