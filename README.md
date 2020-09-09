@@ -75,7 +75,9 @@ Use the following link to add aggregated Jackett indexer results:
 
 or add each tracker indexers individually.
 
-## Additioanl config
+## Additioanl settings
+
+### sysctl
 
 To avoid long-running errors add this to `/etc/sysctl.conf` on your server:
 
@@ -88,6 +90,15 @@ fs.inotify.max_user_watches=524288
 and then apply it:
 
     sudo sysctl -p
+
+
+### crontab
+
+Add this to your `crontab` to force minidlna content re-read every hour:
+
+```
+0 */1 *  *  *  /usr/bin/docker exec -ti minidlna /bin/sh -c 'minidlnad -r'
+```
 
 ## Optional services
 
