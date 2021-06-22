@@ -41,6 +41,7 @@ services:
       - $MEDIA_DIR/media/cartoons:/cartoons
       - $MEDIA_DIR/media/tvshows:/tvshows
       - $MEDIA_DIR/media/music:/music
+      - $MEDIA_DIR/media/tutorials:/tutorials
     ports:
       - 9091:9091
       - 51413:51413
@@ -71,7 +72,7 @@ services:
   # Plex
   #
   plex:
-    image: linuxserver/plex
+    image: linuxserver/plex:bionic
     container_name: plex
     environment:
       - USERID=$PUID
@@ -82,6 +83,18 @@ services:
     volumes:
       - $CONFIG_DIR/plex:/config
       - $MEDIA_DIR/media:/data:ro
+    network_mode: host
+    restart: unless-stopped
+
+  homeassistant:
+    image: homeassistant/raspberrypi4-homeassistant:stable
+    container_name: homeassistant
+    environment:
+      - USERID=$PUID
+      - GROUPID=$PGID
+      - TZ=$TZ
+    volumes:
+      - $CONFIG_DIR/homeassistant:/config
     network_mode: host
     restart: unless-stopped
 
@@ -135,7 +148,8 @@ services:
   # Tor proxy (set for Jackett)
   #
   tor:
-    image: dperson/torproxy
+    #image: dperson/torproxy:8d7aa5bf7a9d
+    image: torproxy:local
     container_name: tor
     environment:
       - USERID=$PUID
